@@ -1,0 +1,190 @@
+# Snowflake Specific Configs
+# https://docs.getdbt.com/reference/resource-configs/snowflake-configs
+
+name: 'cat_dbt'
+version: '1.0.0'
+config-version: 2
+profile: 'default'
+
+# =====
+# Paths
+# =====
+
+model-paths: ["models"]
+seed-paths: ["seeds"]
+test-paths: ["tests"]
+analysis-paths: ["analyses"]
+macro-paths: ["macros"]
+snapshot-paths: ["snapshots"]
+docs-paths: ["docs"]
+asset-paths: ["assets"]
+clean-targets: ["target", "dbt_packages", "logs"]
+
+# ======
+# Models (https://docs.getdbt.com/reference/model-configs)
+# ======
+
+models:
+  +copy_grants: true
+  cat_dbt:
+
+# ======
+# FINANCE_DB
+# ======
+    finance_db:
+      +database: finance_db
+      prod_sch:
+        +schema: prod_sch
+
+# ======
+# PLANFUL_DB
+# ======
+    planful_db:
+      +database: planful_db
+      prod_sch:
+        +schema: prod_sch
+
+
+# ======
+# IBP_DB
+# ======
+    ibp_db:
+      +database: ibp_db
+      forecast_sch:
+        +schema: forecast_sch
+        +materialized: view
+      int_sch:
+        +schema: int_sch
+        +materialized: table
+        temp: 
+          +materialized: view
+      raw_sch:
+        +schema: raw_sch
+        +materialized: table
+      soe_sch:
+        +schema: soe_sch
+        +materialized: table
+      prod_sch:
+        +schema: prod_sch
+        +materialized: table
+
+# ======
+# HR_DB
+# ======
+    hr_db:
+      +database: hr_db
+      prod_sch:
+        +schema: prod_sch
+
+
+      
+# ======
+# SALES_DB
+# ======
+    sales_db:
+      +database: sales_db
+      pardot_sch:
+        +schema: pardot_sch
+        +materialized: view
+        int:
+          +schema: int_sch
+        merge:
+          +materialized: incremental
+          +schema: int_sch
+      salesforce_sch:
+        +schema: salesforce_sch
+      sap_sch:
+        +schema: sap_sch
+      int_sch:
+        +schema: int_sch
+
+      prod_sch:
+        +schema: prod_sch
+      pos_sch:
+        +schema: pos_sch
+
+# ======
+# SAP_BW_DB
+# ======
+    sap_bw_db:
+      +database: sap_bw_db
+      ap_sch:
+        +schema: ap_sch
+        final:
+          +materialized: view
+        merge:
+          +materialized: incremental
+          +schema: int_sch
+      ar_sch:
+        +schema: ar_sch
+        final:
+          +materialized: view
+          +schema: ar_sch
+      sap_bw_sh_cp13:
+        final:
+          +materialized: incremental
+          +schema: sh_sch
+      sh_sch:
+        +schema: sh_sch
+        final:
+          +materialized: view
+        merge:
+          +materialized: incremental
+          +schema: int_scht 
+      int_sch:
+        +schema: int_sch
+      raw_sch:
+        +schema: raw_sch
+        +materialized: table
+      prod_sch:
+        +schema: prod_sch
+      
+
+
+# =====
+# elementary dbt package (https://hub.getdbt.com/elementary-data/elementary/latest/)
+# =====
+# Add double quoted commas if the code exits with 2 error
+  elementary:
+    +database: it_db
+    +schema: "elementary"
+
+# =====
+# Seeds (https://docs.getdbt.com/reference/seed-configs)
+# =====
+
+seeds:
+  +schema: dbt_seeds
+  +enabled: true  
+  +full_refresh: true
+
+# =========
+# Snapshots (https://docs.getdbt.com/reference/snapshot-configs)
+# =========
+
+# =======
+# Sources (https://docs.getdbt.com/reference/source-configs)
+# =======
+
+# =====
+# Tests (https://docs.getdbt.com/reference/test-configs)
+# =====
+
+# =========
+# Variables (https://docs.getdbt.com/docs/building-a-dbt-project/building-models/using-variables)
+# =========
+
+vars:
+  'dbt_date:time_zone': 'America/Chicago'
+
+# ============
+# On Run Start (https://docs.getdbt.com/reference/project-configs/on-run-start-on-run-end)
+# ============
+
+# ==========
+# On Run End (https://docs.getdbt.com/reference/project-configs/on-run-start-on-run-end)
+# ==========
+
+# ========
+# Dispatch (https://docs.getdbt.com/reference/project-configs/dispatch-config)
+# ========
